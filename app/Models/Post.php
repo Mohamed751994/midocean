@@ -9,6 +9,8 @@ class Post extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $hidden = ['updated_at'];
+
 
     public function images() {
         return $this->morphMany(Image::class, 'parentable');
@@ -16,4 +18,10 @@ class Post extends Model
     public function comments() {
         return $this->hasMany(Comment::class);
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d H:i:s', strtotime($value));
+    }
+
 }

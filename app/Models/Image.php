@@ -10,6 +10,7 @@ class Image extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $hidden = ['parentable_id', 'parentable_type','created_at','updated_at'];
 
 
     public function parentable() {
