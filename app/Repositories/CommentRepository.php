@@ -27,17 +27,7 @@ class CommentRepository implements CrudInterface
         $comment = Comment::create(Arr::except($data, 'images'));
         if(isset($data['images']))
         {
-            foreach($data['images'] as $image)
-            {
-                $fileUploaded='Upload_'.rand(1,99999999999).'.'.$image->getClientOriginalExtension();
-                $image->move('uploads/comments/', $fileUploaded);
-                Image::create([
-                    'url' => $fileUploaded,
-                    'type' => $image->getClientOriginalExtension(),
-                    'parentable_id' => $comment->id,
-                    'parentable_type' => Comment::class
-                ]);
-            }
+            $this->upload_multiple_images_in_model($data,Comment::class, $comment->id,'uploads/comments/', 'Comment');
         }
         return $comment;
 
@@ -57,17 +47,7 @@ class CommentRepository implements CrudInterface
         if(isset($data['images']))
         {
             $comment->images()->delete();
-            foreach($data['images'] as $image)
-            {
-                $fileUploaded='Upload_'.rand(1,99999999999).'.'.$image->getClientOriginalExtension();
-                $image->move('uploads/posts/', $fileUploaded);
-                Image::create([
-                    'url' => $fileUploaded,
-                    'type' => $image->getClientOriginalExtension(),
-                    'parentable_id' => $comment->id,
-                    'parentable_type' => Comment::class
-                ]);
-            }
+            $this->upload_multiple_images_in_model($data,Comment::class, $comment->id,'uploads/comments/', 'Comment');
         }
         return $comment;
     }
